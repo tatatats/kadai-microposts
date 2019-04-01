@@ -4,7 +4,11 @@
             <img class="mr-2 rounded" src="{{ Gravatar::src($user->email, 50) }}" alt="">
             <div class="media-body">
                 <div>
-                    {!! link_to_route('users.show', $micropost->user->name, ['id' => $micropost->user->id]) !!} <span class="text-muted">posted at {{ $micropost->created_at }}</span>
+                    @if (isset($micropost->user))
+                        {!! link_to_route('users.show', $micropost->user->name, ['id' => $micropost->user->id]) !!} <span class="text-muted">posted at {{ $micropost->created_at }}</span>
+                    @else
+                        {!! link_to_route('users.show', $micropost->name, ['id' => $micropost->id]) !!} <span class="text-muted">posted at {{ $micropost->created_at }}</span>
+                    @endif
                 </div>
                 <div>
                     <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
@@ -15,8 +19,10 @@
                             {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) !!}
                         {!! Form::close() !!}
                     @endif
+                    @include('favorites.favorites_button', ['microposts' => $microposts])
                 </div>
             </div>
+            
         </li>
     @endforeach
 </ul>
